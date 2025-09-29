@@ -1,6 +1,7 @@
 # Advanced-Calculator-with-AI-Explanation
 
 #**Key Enhancements:**
+
 **1.Multi-Language Code Generation:**
 
 Added buttons for Python, Java, and C programming languages
@@ -33,5 +34,5 @@ Users can switch between different programming languages
 
 The code display updates when the calculation changes
 
-This enhanced calculator now provides explanations in multiple languages and also shows code implementations in Python, Java, and C, making it a valuable tool for both learning mathematics and programming.
+**This enhanced calculator now provides explanations in multiple languages and also shows code implementations in Python, Java, and C, making it a valuable tool for both learning mathematics and programming.**
 
