@@ -1,36 +1,37 @@
 # Advanced-Calculator-with-AI-Explanation
 
-**1.Fixed AI Explanation Functionality:**
+#**Key Enhancements:**
+**1.Multi-Language Code Generation:**
 
-The AI explanation now properly works for all types of calculations
+Added buttons for Python, Java, and C programming languages
 
-Added specific explanations for common operations (addition, multiplication, etc.)
+Each button shows the code implementation in the selected language
 
-Added fallback explanations for operations not explicitly defined
+The code is properly formatted with syntax highlighting (using monospace font)
 
+**2.Improved UI for Code Display:**
 
-**2.Enhanced Explanation Content:**
+Code section appears below the explanation
 
-More detailed and educational explanations for each operation
+Only one code language can be active at a time
 
-Better formatting of the explanation display
+The active code language button is highlighted
 
-Clear titles for each type of operation
+**3.Comprehensive Code Examples:**
 
+Added appropriate code examples for all three languages
 
-**3.Improved Calculation Display:**
+Proper handling of mathematical operations in each language
 
-Better formatting of mathematical symbols in the display
+Includes necessary imports and boilerplate code
 
-Proper handling of special mathematical constants like π
+**4.Better User Experience:**
 
+Code is only shown after an explanation is generated
 
-**4.UI Refinements:**
+Users can switch between different programming languages
 
-Consistent styling throughout the calculator
+The code display updates when the calculation changes
 
-Better responsive design for mobile devices
-
-
-The AI explanation button now works correctly and provides meaningful explanations for calculations. Try performing different operations (like 5*5, 10/2, etc.) and then click the "AI Explain" button to see the detailed explanations.
+This enhanced calculator now provides explanations in multiple languages and also shows code implementations in Python, Java, and C, making it a valuable tool for both learning mathematics and programming.
 
