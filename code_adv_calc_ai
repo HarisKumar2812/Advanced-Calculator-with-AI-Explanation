@@ -1,9 +1,11 @@
+New code(Modern calculator)
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Calculator with AI Explanation</title>
+    <title>Advanced Mathematical Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -158,6 +160,7 @@
         .ai-explanation {
             flex: 1;
             overflow-y: auto;
+            margin-bottom: 20px;
         }
         
         .ai-explanation h3 {
@@ -166,6 +169,31 @@
             align-items: center;
             gap: 8px;
             font-size: 18px;
+        }
+        
+        .language-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .lang-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .lang-btn.active {
+            background: rgba(0, 191, 255, 0.6);
+        }
+        
+        .lang-btn:hover {
+            background: rgba(0, 191, 255, 0.4);
         }
         
         .explanation-content {
@@ -179,16 +207,75 @@
             overflow-y: auto;
         }
         
+        .code-section {
+            margin-top: 15px;
+        }
+        
+        .code-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .code-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .code-btn.active {
+            background: rgba(0, 191, 255, 0.6);
+        }
+        
+        .code-btn:hover {
+            background: rgba(0, 191, 255, 0.4);
+        }
+        
+        .code-content {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            display: none;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .code-content.show {
+            display: block;
+        }
+        
         .math-history {
-            margin-top: 25px;
+            margin-top: 0;
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
         
         .math-history h3 {
-            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 18px;
+        }
+        
+        .toggle-history {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
         }
         
         .history-content {
@@ -198,6 +285,11 @@
             font-size: 14px;
             max-height: 150px;
             overflow-y: auto;
+            display: none;
+        }
+        
+        .history-content.show {
+            display: block;
         }
         
         .history-item {
@@ -262,7 +354,7 @@
                     
                     <button class="btn btn-special" onclick="appendToDisplay('Math.sqrt(')">√</button>
                     <button class="btn btn-special" onclick="appendToDisplay('**2')">x²</button>
-                    <button class="btn btn-special" onclick="appendToDisplay('**')">x^y</button>
+                    <button class="btn btn-special" onclick="appendToDisplay('')">x^y</button>
                     <button class="btn btn-ai" onclick="showExplanation()"><i class="fas fa-robot"></i> AI Explain</button>
                 </div>
             </div>
@@ -270,13 +362,32 @@
             <div class="calculator-sidebar">
                 <div class="ai-explanation">
                     <h3><i class="fas fa-lightbulb"></i> AI Explanation</h3>
+                    <div class="language-selector">
+                        <button class="lang-btn active" data-lang="en">English</button>
+                        <button class="lang-btn" data-lang="ta">Tamil</button>
+                        <button class="lang-btn" data-lang="hi">Hindi</button>
+                    </div>
                     <div class="explanation-content" id="explanation">
                         Click the "AI Explain" button to get an explanation of the current calculation.
+                    </div>
+                    
+                    <div class="code-section">
+                        <div class="code-buttons">
+                            <button class="code-btn" data-lang="python">Python</button>
+                            <button class="code-btn" data-lang="java">Java</button>
+                            <button class="code-btn" data-lang="c">C</button>
+                        </div>
+                        <div class="code-content" id="codeContent"></div>
                     </div>
                 </div>
                 
                 <div class="math-history">
-                    <h3><i class="fas fa-history"></i> History</h3>
+                    <div class="history-header">
+                        <h3><i class="fas fa-history"></i> History</h3>
+                        <button class="toggle-history" id="toggleHistory">
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                    </div>
                     <div class="history-content" id="history">
                         <div class="history-item">2 + 2 = 4</div>
                     </div>
@@ -289,6 +400,8 @@
         let currentCalculation = '2+2';
         let currentResult = '4';
         let calculationHistory = ['2 + 2 = 4'];
+        let currentLanguage = 'en';
+        let currentCodeLanguage = '';
         
         function updateDisplay() {
             document.getElementById('calculation').textContent = currentCalculation;
@@ -318,13 +431,13 @@
                 currentResult = eval(expression).toString();
                 
                 // Add to history
-                const historyEntry = `${formatCalculation(currentCalculation)} = ${currentResult}`;
+                const historyEntry = ${currentCalculation} = ${currentResult};
                 calculationHistory.unshift(historyEntry);
                 
                 // Update history display (keep only last 5)
                 if (calculationHistory.length > 5) calculationHistory.pop();
                 document.getElementById('history').innerHTML = calculationHistory
-                    .map(item => `<div class="history-item">${item}</div>`)
+                    .map(item => <div class="history-item">${item}</div>)
                     .join('');
                 
             } catch (error) {
@@ -333,16 +446,9 @@
             updateDisplay();
         }
         
-        function formatCalculation(calc) {
-            return calc.replace(/\*/g, '×')
-                       .replace(/Math\.PI/g, 'π')
-                       .replace(/Math\.sqrt\(/g, '√(');
-        }
-        
         function clearCalculator() {
             currentCalculation = '';
             currentResult = '';
-            document.getElementById('explanation').innerHTML = 'Click the "AI Explain" button to get an explanation of the current calculation.';
             updateDisplay();
         }
         
@@ -353,78 +459,236 @@
         
         function showExplanation() {
             const explanationElement = document.getElementById('explanation');
+            const codeContent = document.getElementById('codeContent');
             
-            // Simple explanations for demonstration
+            // Hide code content initially
+            codeContent.classList.remove('show');
+            currentCodeLanguage = '';
+            document.querySelectorAll('.code-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Explanations in different languages
             const explanations = {
                 '2+2': {
-                    title: "Basic Addition",
-                    explanation: "Addition is the process of combining two numbers. When you add 2 and 2, you're combining two groups of two, which results in four. This is one of the basic arithmetic operations and forms the foundation for more complex mathematics."
+                    'en': "Addition is the process of combining two numbers. When you add 2 and 2, you're combining two groups of two, which results in four. This is one of the basic arithmetic operations and forms the foundation for more complex mathematics.",
+                    'ta': "கூட்டல் என்பது இரண்டு எண்களை இணைக்கும் செயல்முறையாகும். நீங்கள் 2 மற்றும் 2 ஐ சேர்க்கும்போது, இரண்டு இரு குழுக்களை இணைக்கிறீர்கள், இதன் விளைவாக நான்கு கிடைக்கும். இது அடிப்படை கணித செயல்பாடுகளில் ஒன்றாகும், மேலும் இது மிகவும் சிக்கலான கணிதத்தின் அடித்தளத்தை உருவாக்குகிறது.",
+                    'hi': "जोड़ दो संख्याओं को मिलाने की प्रक्रिया है। जब आप 2 और 2 जोड़ते हैं, तो आप दो समूहों को मिला रहे हैं, जिसका परिणाम चार होता है। यह बुनियादी अंकगणितीय संचालन में से एक है और अधिक जटिल गणित की नींव बनाता है।"
                 },
                 '2*2': {
-                    title: "Multiplication",
-                    explanation: "Multiplication is repeated addition. 2 multiplied by 2 means adding 2 to itself 2 times (2 + 2), which equals 4. It can also be visualized as a 2x2 grid, which contains 4 units."
+                    'en': "Multiplication is repeated addition. 2 multiplied by 2 means adding 2 to itself 2 times (2 + 2), which equals 4. It can also be visualized as a 2x2 grid, which contains 4 units.",
+                    'ta': "பெருக்கல் என்பது மீண்டும் மீண்டும் கூட்டல் ஆகும். 2 ஐ 2 ஆல் பெருக்குவது என்பது 2 ஐ தன்னுடன் 2 முறை சேர்ப்பதாகும் (2 + 2), இது 4 க்கு சமம். இதை 2x2 கட்டமாகக் காட்சிப்படுத்தலாம், இதில் 4 அலகுகள் உள்ளன.",
+                    'hi': "गुणा बार-बार जोड़ है। 2 को 2 से गुणा करने का मतलब है 2 को अपने आप में 2 बार जोड़ना (2 + 2), जो 4 के बराबर है। इसे 2x2 ग्रिड के रूप में भी देखा जा सकता है, जिसमें 4 इकाइयाँ होती हैं।"
                 },
                 '4/2': {
-                    title: "Division",
-                    explanation: "Division is the process of splitting a number into equal parts. When you divide 4 by 2, you're splitting 4 into 2 equal groups, with each group containing 2. Division is the inverse operation of multiplication."
+                    'en': "Division is the process of splitting a number into equal parts. When you divide 4 by 2, you're splitting 4 into 2 equal groups, with each group containing 2. Division is the inverse operation of multiplication.",
+                    'ta': "வகுத்தல் என்பது ஒரு எண்ணை சம பாகங்களாக பிரிக்கும் செயல்முறையாகும். நீங்கள் 4 ஐ 2 ஆல் வகுக்கும்போது, 4 ஐ 2 சம குழுக்களாக பிரிக்கிறீர்கள், ஒவ்வொரு குழுவிலும் 2 உள்ளது. வகுத்தல் என்பது பெருக்கலின் தலைகீழ் செயல்பாடாகும்.",
+                    'hi': "विभाजन एक संख्या को बराबर भागों में बांटने की प्रक्रिया है। जब आप 4 को 2 से विभाजित करते हैं, तो आप 4 को 2 बराबर समूहों में विभाजित कर रहे हैं, प्रत्येक समूह में 2 होते हैं। विभाजन गुणन की व्युत्क्रम संक्रिया है।"
                 },
-                '2**3': {
-                    title: "Exponentiation",
-                    explanation: "Exponentiation represents repeated multiplication. 2 raised to the power of 3 means multiplying 2 by itself 3 times (2 × 2 × 2), which equals 8. Exponents are useful for representing very large or very small numbers."
+                '2^3': {
+                    'en': "Exponentiation represents repeated multiplication. 2 raised to the power of 3 means multiplying 2 by itself 3 times (2 × 2 × 2), which equals 8. Exponents are useful for representing very large or very small numbers.",
+                    'ta': "அடுக்கு என்பது மீண்டும் மீண்டும் பெருக்கலைக் குறிக்கிறது. 2 அடுக்கு 3 என்றால் 2 ஐ தன்னுடன் 3 முறை பெருக்குவது (2 × 2 × 2), இது 8 க்கு சமம். மிகப் பெரிய அல்லது மிகச் சிறிய எண்களைக் குறிக்க அடுக்குகள் பயனுள்ளதாக இருக்கும்.",
+                    'hi': "घातांक बार-बार गुणा को दर्शाता है। 2 की घात 3 का मतलब है 2 को अपने आप में 3 बार गुणा करना (2 × 2 × 2), जो 8 के बराबर है। घातांक बहुत बड़ी या बहुत छोटी संख्याओं का प्रतिनिधित्व करने के लिए उपयोगी होते हैं।"
+                }
+            };
+            
+            // Code examples for different languages
+            const codeExamples = {
+                '2+2': {
+                    'python': `# Addition of two numbers
+result = 2 + 2
+print("2 + 2 =", result)`,
+                    
+                    'java': `// Addition of two numbers
+public class Main {
+    public static void main(String[] args) {
+        int result = 2 + 2;
+        System.out.println("2 + 2 = " + result);
+    }
+}`,
+                    
+                    'c': `// Addition of two numbers
+#include <stdio.h>
+
+int main() {
+    int result = 2 + 2;
+    printf("2 + 2 = %d\\n", result);
+    return 0;
+}`
                 },
-                'Math.sqrt(9)': {
-                    title: "Square Root",
-                    explanation: "The square root of a number is a value that, when multiplied by itself, gives the original number. The square root of 9 is 3 because 3 × 3 = 9. Square roots are the inverse operation of squaring a number."
+                
+                '2*2': {
+                    'python': `# Multiplication of two numbers
+result = 2 * 2
+print("2 * 2 =", result)`,
+                    
+                    'java': `// Multiplication of two numbers
+public class Main {
+    public static void main(String[] args) {
+        int result = 2 * 2;
+        System.out.println("2 * 2 = " + result);
+    }
+}`,
+                    
+                    'c': `// Multiplication of two numbers
+#include <stdio.h>
+
+int main() {
+    int result = 2 * 2;
+    printf("2 * 2 = %d\\n", result);
+    return 0;
+}`
                 },
-                'Math.PI': {
-                    title: "Mathematical Constant π",
-                    explanation: "Pi (π) is a mathematical constant that represents the ratio of a circle's circumference to its diameter. It is approximately equal to 3.14159. Pi is an irrational number, meaning it cannot be expressed exactly as a fraction and its decimal representation never ends or settles into a repeating pattern."
+                
+                '4/2': {
+                    'python': `# Division of two numbers
+result = 4 / 2
+print("4 / 2 =", result)`,
+                    
+                    'java': `// Division of two numbers
+public class Main {
+    public static void main(String[] args) {
+        double result = 4.0 / 2.0;
+        System.out.println("4 / 2 = " + result);
+    }
+}`,
+                    
+                    'c': `// Division of two numbers
+#include <stdio.h>
+
+int main() {
+    double result = 4.0 / 2.0;
+    printf("4 / 2 = %.2f\\n", result);
+    return 0;
+}`
+                },
+                
+                '2^3': {
+                    'python': `# Exponentiation
+result = 2 ** 3
+print("2 raised to the power of 3 =", result)`,
+                    
+                    'java': `// Exponentiation
+public class Main {
+    public static void main(String[] args) {
+        double result = Math.pow(2, 3);
+        System.out.println("2 raised to the power of 3 = " + result);
+    }
+}`,
+                    
+                    'c': `// Exponentiation
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double result = pow(2, 3);
+    printf("2 raised to the power of 3 = %.2f\\n", result);
+    return 0;
+}`
                 }
             };
             
             // Get explanation or use a default one
-            let explanationData = explanations[currentCalculation];
+            let explanation = explanations[currentCalculation] || {
+                'en': The calculation ${currentCalculation} results in ${currentResult}. This is a mathematical operation that follows the standard rules of arithmetic.,
+                'ta': கணக்கீடு ${currentCalculation} இன் முடிவு ${currentResult} ஆகும். இது எண்கணிதத்தின் நிலையான விதிகளைப் பின்பற்றும் ஒரு கணித செயல்பாடாகும்.,
+                'hi': गणना ${currentCalculation} का परिणाम ${currentResult} है। यह एक गणितीय संचालन है जो अंकगणित के मानक नियमों का पालन करता है।
+            };
             
-            if (!explanationData) {
-                // Try to detect the operation type for a generic explanation
-                if (currentCalculation.includes('+')) {
-                    explanationData = {
-                        title: "Addition",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. Addition is the process of finding the total sum of two or more numbers. It's one of the four basic operations in arithmetic.`
-                    };
-                } else if (currentCalculation.includes('-')) {
-                    explanationData = {
-                        title: "Subtraction",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. Subtraction is the process of taking one number away from another. It represents the difference between numbers.`
-                    };
-                } else if (currentCalculation.includes('*')) {
-                    explanationData = {
-                        title: "Multiplication",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. Multiplication is repeated addition. It represents scaling one number by another.`
-                    };
-                } else if (currentCalculation.includes('/')) {
-                    explanationData = {
-                        title: "Division",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. Division is the process of splitting a number into equal parts. It represents how many times one number is contained within another.`
-                    };
-                } else if (currentCalculation.includes('**')) {
-                    explanationData = {
-                        title: "Exponentiation",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. Exponentiation is the process of raising a number to a power, which represents repeated multiplication.`
-                    };
-                } else {
-                    explanationData = {
-                        title: "Calculation",
-                        explanation: `The calculation ${currentCalculation} results in ${currentResult}. This is a mathematical operation that follows the standard rules of arithmetic.`
-                    };
-                }
-            }
+            // Get code examples or use default ones
+            let codes = codeExamples[currentCalculation] || {
+                'python': `# Python code for: ${currentCalculation}
+result = ${currentCalculation.replace('Math.PI', 'math.pi').replace('Math.sqrt', 'math.sqrt')}
+print("${currentCalculation} =", result)`,
+                
+                'java': `// Java code for: ${currentCalculation}
+public class Main {
+    public static void main(String[] args) {
+        double result = ${currentCalculation.replace('Math.PI', 'Math.PI').replace('Math.sqrt', 'Math.sqrt')};
+        System.out.println("${currentCalculation} = " + result);
+    }
+}`,
+                
+                'c': `// C code for: ${currentCalculation}
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    double result = ${currentCalculation.replace('Math.PI', 'M_PI').replace('Math.sqrt', 'sqrt')};
+    printf("${currentCalculation} = %.2f\\n", result);
+    return 0;
+}`
+            };
             
             explanationElement.innerHTML = `
-                <p><strong>${explanationData.title}:</strong> ${formatCalculation(currentCalculation)} = ${currentResult}</p>
-                <p>${explanationData.explanation}</p>
+                <p><strong>${currentLanguage === 'en' ? 'Calculation' : currentLanguage === 'ta' ? 'கணக்கீடு' : 'गणना'}:</strong> ${currentCalculation}</p>
+                <p><strong>${currentLanguage === 'en' ? 'Result' : currentLanguage === 'ta' ? 'முடிவு' : 'परिणाम'}:</strong> ${currentResult}</p>
+                <p><strong>${currentLanguage === 'en' ? 'Explanation' : currentLanguage === 'ta' ? 'விளக்கம்' : 'व्याख्या'}:</strong> ${explanation[currentLanguage]}</p>
             `;
+            
+            // Store the code examples for later retrieval
+            document.querySelectorAll('.code-btn').forEach(btn => {
+                const lang = btn.getAttribute('data-lang');
+                btn.setAttribute('data-code', codes[lang]);
+            });
         }
+        
+        // Toggle history visibility
+        document.getElementById('toggleHistory').addEventListener('click', function() {
+            const historyContent = document.getElementById('history');
+            historyContent.classList.toggle('show');
+            this.innerHTML = historyContent.classList.contains('show') ? 
+                '<i class="fas fa-chevron-up"></i>' : '<i class="fas fa-chevron-down"></i>';
+        });
+        
+        // Language selection for explanations
+        document.querySelectorAll('.lang-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentLanguage = this.getAttribute('data-lang');
+                
+                // If there's already an explanation, update it with the new language
+                const explanationText = document.getElementById('explanation').textContent;
+                if (!explanationText.includes('Click the "AI Explain" button')) {
+                    showExplanation();
+                    
+                    // If code is currently shown, update it too
+                    if (currentCodeLanguage) {
+                        showCode(currentCodeLanguage);
+                    }
+                }
+            });
+        });
+        
+        // Function to show code in the selected language
+        function showCode(lang) {
+            const codeContent = document.getElementById('codeContent');
+            const codeBtn = document.querySelector(.code-btn[data-lang="${lang}"]);
+            const code = codeBtn.getAttribute('data-code');
+            
+            // Update UI
+            document.querySelectorAll('.code-btn').forEach(btn => btn.classList.remove('active'));
+            codeBtn.classList.add('active');
+            codeContent.textContent = code;
+            codeContent.classList.add('show');
+            currentCodeLanguage = lang;
+        }
+        
+        // Code language selection
+        document.querySelectorAll('.code-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                
+                // Check if we already have an explanation
+                const explanationText = document.getElementById('explanation').textContent;
+                if (explanationText.includes('Click the "AI Explain" button')) {
+                    // If no explanation yet, generate one first
+                    showExplanation();
+                }
+                
+                // Show the selected code
+                showCode(lang);
+            });
+        });
         
         // Initialize the display
         updateDisplay();
